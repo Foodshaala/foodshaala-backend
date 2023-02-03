@@ -1,9 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const app = express();
-require("dotenv").config();
-const PORT = 3000;
+const authRouter = require("./routes/auth");
 
+//init
+require("dotenv").config();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+//middleware
+app.use(authRouter);
+
+//db connection
+mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.db)
   .then(() => {
@@ -13,11 +21,8 @@ mongoose
     console.log(e);
   });
 
+//listening
 app.listen(PORT, "localhost", (err) => {
   if (err) console.log(err);
   console.log(`listening at port ${PORT}`);
-});
-
-app.get("/", (re, res) => {
-  res.send("hello world");
 });
