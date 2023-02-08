@@ -19,6 +19,16 @@ const userSchema = mongoose.Schema({
       message: "Please enter a valid email address",
     },
   },
+  phoneNo:{
+    required: true,
+    type: Number,
+    validate: {
+      validator: (value) => {
+        return value.toString().length==10;
+      },
+      message: "Please enter a valid Phone no.";
+    }
+  },
   password: {
     required: true,
     type: String,
