@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Address = require("./address.js");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -19,24 +20,25 @@ const userSchema = mongoose.Schema({
       message: "Please enter a valid email address",
     },
   },
-  phoneNo:{
+  phoneNo: {
     required: true,
     type: Number,
     validate: {
       validator: (value) => {
-        return value.toString().length==10;
+        return value.toString().length == 10;
       },
-      message: "Please enter a valid Phone no.";
-    }
+      message: "Please enter a valid Phone no.",
+    },
   },
   password: {
     required: true,
     type: String,
   },
-  address: {
-    type: String,
-    default: "",
-  },
+  addressBook: [
+    {
+      address: Address,
+    },
+  ],
   type: {
     type: String,
     default: "user",
