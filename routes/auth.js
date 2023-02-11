@@ -26,7 +26,8 @@ authRouter.post("/api/signup", async (req, res) => {
       password: hashedPassword,
     });
     user = await user.save();
-    res.json(user);
+    const token = await jwt.sign({ _id: user._id }, process.env.securityKey);
+    res.json({ token, ...user._doc });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -62,6 +63,18 @@ authRouter.post("/api/isValidToken", async (req, res) => {
     const user = await User.findById(verified._id);
     if (!user) return res.json(false);
     res.json(true);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+//get user details
+authRouter.post("/api/user", async (req, res) => {
+  try {
+    const token = req.header("auth-token");
+    const _id = jwt.verify(token, process.env.securityKey)._id;
+    const user = await User.findById(_id);
+    res.json({ token, ...user._doc });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
