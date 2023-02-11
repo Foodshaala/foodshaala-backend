@@ -32,6 +32,7 @@ authRouter.post("/api/signup", async (req, res) => {
   }
 });
 
+//signin
 authRouter.post("/api/signin", async (req, res) => {
   try {
     const { email, password } = await req.body;
@@ -45,6 +46,22 @@ authRouter.post("/api/signin", async (req, res) => {
     }
     const token = await jwt.sign({ _id: user._id }, process.env.securityKey);
     res.json({ token, ...user._doc });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// check if token is valid
+authRouter.post("/api/isValidToken", async (req, res) => {
+  try {
+    const token = req.header("auth-token");
+    if (!token) return res.json(false);
+    const verified = jwt.verify(token, process.env.securityKey);
+    if (!verified) return res.json(false);
+
+    const user = await User.findById(verified._id);
+    if (!user) return res.json(false);
+    res.json(true);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
