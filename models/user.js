@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Address = require("./address.js");
+const { addressSchema } = require("./address.js");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -36,7 +36,7 @@ const userSchema = mongoose.Schema({
   },
   addressBook: [
     {
-      address: Address,
+      address: addressSchema,
     },
   ],
   type: {
