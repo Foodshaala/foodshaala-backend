@@ -20,18 +20,18 @@ const foodSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  quantity: [
-    mongoose.Schema({
-      name: {
-        type: String,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
-    }),
-  ],
+  //   quantity: [
+  //     mongoose.Schema({
+  //       name: {
+  //         type: String,
+  //         required: true,
+  //       },
+  //       price: {
+  //         type: Number,
+  //         required: true,
+  //       },
+  //     }),
+  //   ],
   rating: [ratingSchema],
 });
 

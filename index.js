@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
+const sellerRouter = require("./routes/seller");
 
 //init
 require("dotenv").config();
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(authRouter);
+app.use(sellerRouter);
 
 //db connection
 mongoose.set("strictQuery", false);

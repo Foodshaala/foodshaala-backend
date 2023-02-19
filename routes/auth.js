@@ -3,7 +3,6 @@ const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { findOne } = require("../models/user");
 const authRouter = express.Router();
 
 authRouter.post("/api/signup", async (req, res) => {
