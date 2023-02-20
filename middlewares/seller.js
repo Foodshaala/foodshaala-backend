@@ -13,7 +13,8 @@ const seller = async (req, res, next) => {
       return res
         .status(401)
         .json({ msg: "Token verification failed, authorization denied." });
-    const user = await User.findById(verified.id);
+    const user = await User.findById(verified._id);
+    if (!user) return res.status(404).json({ msg: "user does not exists" });
     if (user.type != "seller") {
       return res.status(401).json({ msg: "You are not a seller!" });
     }
@@ -22,6 +23,7 @@ const seller = async (req, res, next) => {
     next();
   } catch (err) {
     console.log("error in seller middleware");
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };

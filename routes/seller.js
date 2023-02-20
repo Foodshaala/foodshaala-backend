@@ -3,7 +3,7 @@ const sellerRouter = express.Router();
 const { FoodModel } = require("../models/food");
 const seller = require("../middlewares/seller");
 
-sellerRouter.post("/api/add-food", async (req, res) => {
+sellerRouter.post("/api/add-food", seller, async (req, res) => {
   try {
     const { name, price, description, label, image, quantity, rating } =
       await req.body;
