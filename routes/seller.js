@@ -6,7 +6,26 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { Restaurant } = require("../models/restaurant");
 
-sellerRouter.post("/api/seller/add-food", seller, async (req, res) => {
+sellerRouter.post("/api/restaurant/add", seller, async (req, res) => {
+  try {
+    const token = req.header("auth-token");
+    const { name, categories, phoneNo, address } = await req.body;
+    const sellerId = jwt.verify(token, process.env.securityKey)._id;
+    let restaurant = Restaurant({
+      name,
+      categories,
+      phoneNo,
+      address,
+      owner: sellerId,
+    });
+    restaurant = await restaurant.save();
+    res.status(200).json(restaurant);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+sellerRouter.post("/api/restaurant/add-food", seller, async (req, res) => {
   try {
     const {
       name,

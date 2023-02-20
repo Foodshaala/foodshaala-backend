@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { addressSchema } = require("address.js");
+const { addressSchema } = require("./address.js");
 const restaurantSchema = mongoose.Schema({
   name: {
     type: String,
@@ -7,10 +7,7 @@ const restaurantSchema = mongoose.Schema({
   },
   categories: [
     {
-      name: {
-        type: String,
-        required: true,
-      },
+      type: String,
     },
   ],
   phoneNo: {
