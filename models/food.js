@@ -51,6 +51,6 @@ const foodSchema = mongoose.Schema({
   rating: [ratingSchema],
 });
 
-const FoodModel = mongoose.model("FoodModel", foodSchema);
+const FoodModel = mongoose.model("FoodItems", foodSchema);
 
 module.exports = { FoodModel, foodSchema };
