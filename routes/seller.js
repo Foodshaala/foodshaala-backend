@@ -5,8 +5,17 @@ const seller = require("../middlewares/seller");
 
 sellerRouter.post("/api/add-food", seller, async (req, res) => {
   try {
-    const { name, price, description, label, image, quantity, rating } =
-      await req.body;
+    const {
+      name,
+      price,
+      description,
+      label,
+      image,
+      quantity,
+      rating,
+      category,
+      addOns,
+    } = await req.body;
     let food = FoodModel({
       name,
       price,
@@ -15,6 +24,8 @@ sellerRouter.post("/api/add-food", seller, async (req, res) => {
       image,
       quantity,
       rating,
+      category,
+      addOns,
     });
     product = await food.save();
     res.json(product);
