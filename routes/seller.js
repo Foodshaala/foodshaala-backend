@@ -2,8 +2,11 @@ const express = require("express");
 const sellerRouter = express.Router();
 const { FoodModel } = require("../models/food");
 const seller = require("../middlewares/seller");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { Restaurant } = require("../models/restaurant");
 
-sellerRouter.post("/api/add-food", seller, async (req, res) => {
+sellerRouter.post("/api/seller/add-food", seller, async (req, res) => {
   try {
     const {
       name,

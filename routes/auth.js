@@ -25,7 +25,7 @@ authRouter.post("/api/signup", async (req, res) => {
       password: hashedPassword,
     });
     user = await user.save();
-    const token = await jwt.sign({ _id: user._id }, process.env.securityKey);
+    const token = jwt.sign({ _id: user._id }, process.env.securityKey);
     res.json({ token, ...user._doc });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -44,7 +44,7 @@ authRouter.post("/api/signin", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ msg: "Incorrect password." });
     }
-    const token = await jwt.sign({ _id: user._id }, process.env.securityKey);
+    const token = jwt.sign({ _id: user._id }, process.env.securityKey);
     res.json({ token, ...user._doc });
   } catch (e) {
     res.status(500).json({ error: e.message });
