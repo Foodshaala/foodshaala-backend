@@ -48,6 +48,7 @@ const foodSchema = mongoose.Schema({
       },
     },
   ],
+  restaurant: mongoose.Schema.Types.ObjectId,
   rating: [ratingSchema],
 });
 

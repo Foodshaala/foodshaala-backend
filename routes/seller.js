@@ -5,6 +5,7 @@ const seller = require("../middlewares/seller");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { Restaurant } = require("../models/restaurant");
+const { default: mongoose } = require("mongoose");
 
 sellerRouter.post("/api/restaurant/add", seller, async (req, res) => {
   try {
@@ -25,8 +26,11 @@ sellerRouter.post("/api/restaurant/add", seller, async (req, res) => {
   }
 });
 
-sellerRouter.post("/api/restaurant/add-food", seller, async (req, res) => {
+sellerRouter.post("/api/food/add", seller, async (req, res) => {
   try {
+    const token = req.header("auth-token");
+    const sellerId = jwt.verify(token, process.env.securityKey)._id;
+    const restaurant = Restaurant.findOne({ owner: sellerId });
     const {
       name,
       price,
@@ -48,9 +52,26 @@ sellerRouter.post("/api/restaurant/add-food", seller, async (req, res) => {
       rating,
       category,
       addOns,
+      restaurant: restaurant._id,
     });
-    product = await food.save();
-    res.json(product);
+    food = await food.save();
+    Restaurant.updateOne(
+      { _id: restaurant._id },
+      { $push: { menu: food._id } }
+    );
+    res.json(food);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+sellerRouter.get("/api/food", seller, async (req, res) => {
+  try {
+    const token = req.header("auth-token");
+    const seller = jwt.verify(token, process.env.securityKey);
+    const restaurant = Restaurant.find({ owner: sellerId });
+    const food = FoodModel.find({ restaurant: restaurant._id });
+    res.status(200).json(food);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
