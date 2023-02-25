@@ -5,7 +5,15 @@ const seller = require("../middlewares/seller");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { Restaurant } = require("../models/restaurant");
-const { default: mongoose } = require("mongoose");
+
+sellerRouter.get("/api/restaurants", async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find({});
+    res.status(200).json(restaurants);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 sellerRouter.post("/api/restaurant/add", seller, async (req, res) => {
   try {
@@ -30,13 +38,15 @@ sellerRouter.post("/api/food/add", seller, async (req, res) => {
   try {
     const token = req.header("auth-token");
     const sellerId = jwt.verify(token, process.env.securityKey)._id;
-    const restaurant = Restaurant.findOne({ owner: sellerId });
+    console.log(sellerId);
+    const restaurants = await Restaurant.findOne({ owner: sellerId });
+    console.log(restaurants);
     const {
       name,
       price,
       description,
       label,
-      image,
+      imageUrl,
       quantity,
       rating,
       category,
@@ -47,16 +57,16 @@ sellerRouter.post("/api/food/add", seller, async (req, res) => {
       price,
       description,
       label,
-      image,
+      imageUrl,
       quantity,
       rating,
       category,
       addOns,
-      restaurant: restaurant._id,
+      restaurant: restaurants._id,
     });
     food = await food.save();
-    Restaurant.updateOne(
-      { _id: restaurant._id },
+    await Restaurant.updateOne(
+      { _id: restaurants._id },
       { $push: { menu: food._id } }
     );
     res.json(food);
@@ -69,8 +79,8 @@ sellerRouter.get("/api/food", seller, async (req, res) => {
   try {
     const token = req.header("auth-token");
     const seller = jwt.verify(token, process.env.securityKey);
-    const restaurant = Restaurant.find({ owner: sellerId });
-    const food = FoodModel.find({ restaurant: restaurant._id });
+    const restaurant = await Restaurant.findOne({ owner: seller._id });
+    const food = await FoodModel.find({ restaurant: restaurant._id });
     res.status(200).json(food);
   } catch (e) {
     res.status(500).json({ error: e.message });

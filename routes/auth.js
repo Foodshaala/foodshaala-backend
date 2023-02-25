@@ -7,7 +7,7 @@ const authRouter = express.Router();
 
 authRouter.post("/api/signup", async (req, res) => {
   try {
-    const { name, email, phoneNo, password } = await req.body;
+    const { name, email, phoneNo, password, type } = await req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -23,6 +23,7 @@ authRouter.post("/api/signup", async (req, res) => {
       email,
       phoneNo,
       password: hashedPassword,
+      type,
     });
     user = await user.save();
     const token = jwt.sign({ _id: user._id }, process.env.securityKey);
