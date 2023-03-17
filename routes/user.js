@@ -7,9 +7,22 @@ require("dotenv").config();
 const { User } = require("../models/user");
 
 //search for query
-foodRouter.get("/api/food/:query", userMidWare, async (req, res) => {
+foodRouter.get("/api/food/:query", user, async (req, res) => {
   try {
+    const token = req.header("auth-token");
+    const userId = jwt.verify(token, process.env.securityKey)._id;
     const query = req.params.query;
+    //adding search query to search history
+    User.findByIdAndUpdate(
+      userId,
+      { $push: { search_history: query } },
+      { new: true },
+      (err, updatedUser) => {
+        if (err) {
+          console.error(err);
+        }
+      }
+    );
     const regex = new RegExp(query, "i"); // 'i' means case-insensitive
     FoodModel.find({
       $or: [{ name: { $regex: regex } }, { category: { $regex: regex } }],
