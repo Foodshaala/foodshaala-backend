@@ -44,6 +44,17 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "user",
   },
+  search_history: [{ query: String, date: Date }],
+  order_history: [{ food_id: mongoose.Schema.Types.ObjectId, date: Date }],
+  cart: [
+    {
+      foodId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "FoodModel",
+      },
+      quantity: Number,
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);

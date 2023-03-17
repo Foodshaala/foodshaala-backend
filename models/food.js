@@ -49,9 +49,9 @@ const foodSchema = mongoose.Schema({
     },
   ],
   restaurant: mongoose.Schema.Types.ObjectId,
-  rating: [ratingSchema],
+  ratings: [ratingSchema],
 });
 
-const FoodModel = mongoose.model("FoodItems", foodSchema);
+const FoodModel = mongoose.model("FoodModel", foodSchema);
 
 module.exports = { FoodModel, foodSchema };
