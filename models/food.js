@@ -52,6 +52,8 @@ const foodSchema = mongoose.Schema({
   ratings: [ratingSchema],
 });
 
+foodSchema.index({ name: 1 });
+foodSchema.index({ category: 1 });
 const FoodModel = mongoose.model("FoodModel", foodSchema);
 
 module.exports = { FoodModel, foodSchema };
