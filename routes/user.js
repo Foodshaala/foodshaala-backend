@@ -7,7 +7,7 @@ require("dotenv").config();
 const { User } = require("../models/user");
 
 //search for query
-foodRouter.get("/api/food/:query", user, async (req, res) => {
+foodRouter.get("/api/food/:query/:pageno", user, async (req, res) => {
   try {
     const token = req.header("auth-token");
     const userId = jwt.verify(token, process.env.securityKey)._id;
@@ -23,11 +23,15 @@ foodRouter.get("/api/food/:query", user, async (req, res) => {
         }
       }
     );
+    const pageLimit = 10;
+    const pageno = req.params.pageno || 1;
     const regex = new RegExp(query, "i"); // 'i' means case-insensitive
     FoodModel.find({
       $or: [{ name: { $regex: regex } }, { category: { $regex: regex } }],
     })
       .hint({ name: 1, category: 1 })
+      .skip(pageLimit * pageno - pageno)
+      .limit(pageLimit)
       .exec((err, foodItems) => {
         if (err) {
           console.error(err);
