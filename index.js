@@ -21,13 +21,12 @@ mongoose
   .connect(process.env.db)
   .then(() => {
     console.log("connection to database successful");
+    //listening
+    app.listen(PORT, "localhost", (err) => {
+      if (err) console.log(err);
+      console.log(`listening at port ${PORT}`);
+    });
   })
   .catch((e) => {
     console.log(e);
   });
-
-//listening
-app.listen(PORT, "localhost", (err) => {
-  if (err) console.log(err);
-  console.log(`listening at port ${PORT}`);
-});
