@@ -7,7 +7,7 @@ require("dotenv").config();
 const { User } = require("../models/user");
 
 //search for query
-foodRouter.get("/api/food/:query/:pageno", user, async (req, res) => {
+foodRouter.get("/api/search/:query/:pageno", user, async (req, res) => {
   try {
     const token = req.header("auth-token");
     const userId = jwt.verify(token, process.env.securityKey)._id;

@@ -5,6 +5,9 @@ const restaurantSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+  },
   categories: [
     {
       type: String,
@@ -19,8 +22,16 @@ const restaurantSchema = mongoose.Schema({
       message: "Please enter a valid Phone no.",
     },
   },
-  menu: [mongoose.Schema.Types.ObjectId],
-  owner: mongoose.Schema.Types.ObjectId,
+  menu: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FoodModel",
+    },
+  ],
+  owner: {
+    ref: "User",
+    type: mongoose.Schema.Types.ObjectId,
+  },
   address: addressSchema,
 });
 

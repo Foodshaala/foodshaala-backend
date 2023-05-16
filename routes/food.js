@@ -2,8 +2,8 @@ const express = require("express");
 const foodRouter = express.Router();
 const userMidWare = require("../middlewares/user");
 const { FoodModel } = require("../models/food");
-
-foodRouter.post("/api/food/trending", userMidWare, async (res, req) => {
+const { Restaurant } = require("../models/restaurant");
+foodRouter.get("/api/food/trending", userMidWare, async (req, res) => {
   try {
     const foodList = await FoodModel.find({});
     foodList.sort((a, b) => {
@@ -24,3 +24,19 @@ foodRouter.post("/api/food/trending", userMidWare, async (res, req) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+foodRouter.post("/api/restaurant/menu", userMidWare, async (req, res) => {
+  try {
+    const restaurantId = await req.body.restaurantId;
+    Restaurant.findById(restaurantId)
+      .populate("menu")
+      .exec((err, restaurant) => {
+        if (err) throw err;
+        res.json(restaurant.menu);
+      });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+module.exports = foodRouter;

@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
 const sellerRouter = require("./routes/seller");
-
+const foodRouter = require("./routes/food");
 //init
 require("dotenv").config();
 const app = express();
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(authRouter);
 app.use(sellerRouter);
+app.use(foodRouter);
 
 //db connection
 mongoose.set("strictQuery", false);

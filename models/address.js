@@ -9,10 +9,6 @@ const addressSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  landmark: {
-    type: String,
-    required: true,
-  },
   completeAddress: {
     type: String,
     required: true,
